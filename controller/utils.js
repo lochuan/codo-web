@@ -73,5 +73,3 @@ function eventHandler(event){
         postJson(url, postData, (response)=>{console.log(response)});
     }
 }
-
-function 
