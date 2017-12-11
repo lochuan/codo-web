@@ -1,0 +1,26 @@
+<?php
+
+//User
+create_room($room_name)
+join_room($room_id)
+delete_room($room_id, $room_name)
+
+//Room
+add_todo($user, $todo)
+delete_todo($user, $todo_id)
+edit_todo($todo_id, $todo)
+pick_todo($user, $todo_id)
+done_todo($user, $todo_id)
+
+//Utils
+
+id_check($user_name)
+
+
+register($user_name, $passwd, $real_name)
+{"func":"registration_form","form":{"registration-input-id":"Lochuan","registration-input-real-name":"张洛川","registration-input-passwd1":"1234","registration-input-passwd2":"1234"}}
+
+
+login($user_name, $passwd)
+{"func":"login_form","form":{"login-input-id":"lochuan","login-input-password":"1234"}}
+?>

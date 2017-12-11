@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Codo</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <!-- User CSS -->
+    <link rel="stylesheet" type="text/css" href="/views/style/home.css">
+    <!-- Icon -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+</head>
+<body>
+    <!-- Main Container -->
+    <div class="container-fluid h-100" id="main_container">
+        <!-- A row which cross the whole viewport-->
+        <div class="row h-100">
+            <!-- Left Part -->
+            <div class="col-sm-3 bg-white h-100">
+                <div class="d-flex flex-column justify-content-between align-items-center h-100">
+                    <!-- Room List-->
+                    <div class="list-group w-100" id="roomlist" role="tablist">
+                    </div>
+                    <!-- Buttons-->
+                    <div class="d-flex flex-row justify-content-around align-items-center bg-light rounded w-100">
+                        <button id="create-room-btn" type="button" class="btn btn-light" data-toggle="modal" data-target="#create-room-modal">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                        <button id="join-room-btn" type="button" class="btn btn-light" data-toggle="modal" data-target="#join-room-modal">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </button>
+                        <button id="delete-room-btn" type="button" class="btn btn-light" data-toggle="modal" data-target="#delete-room-modal">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Right side-->
+            <div id="right_side" class="col-sm-9 bg-dark d-flex flex-column align-items-center h-100">
+                <div class="row w-100" style="height: 100%">
+                    <!-- Outer Card-->
+                    <div id="room_card" class="card text-center w-100 h-100">
+                        <!-- Outer Card Header-->
+                        <div class="card-header" style="height: 8%">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="todo-tab" data-toggle="tab" href="#todo" role="tab" aria-controls="todo" aria-selected="true">Todo</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="ongoing-tab" data-toggle="tab" href="#ongoing" role="tab" aria-controls="ongoing" aria-selected="false">Ongoing</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="done-tab" data-toggle="tab" href="#done" role="tab" aria-controls="done" aria-selected="false">Done</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="members-tab" data-toggle="tab" href="#members" role="tab" aria-controls="members" aria-selected="false">Members</a>
+                                </ul>
+                            </div>
+                            <!-- Outer Card Body-->
+                            <div class="card-body" style="height: 86%">
+                                <!-- Todo,Ongoing,Done,Members的Tab -->
+                                <div class="tab-content" id="myTabContent" style="height: 100%">
+                                    <!--********************************* Todo Tab *********************************-->
+                                    <div class="tab-pane fade show active" id="todo" role="tabpanel" aria-labelledby="todo-tab" style="height: 100%;">
+                                        <div class="card text-white bg-light mb-3 w-100" aria-hidden="true" style="height: 100%;">
+                                            <!-- 内嵌卡片脚身子 -->
+                                            <div class="card-body" style="height:100%; overflow: auto;">
+                                                <!-- TODO项目列表 -->
+                                                <ul id="todo_list" class="list-group text-dark">
+                                                    <!-- 一个TODO项目 -->
+                                                </ul>
+                                            </div>
+                                            <!--添加Todo按钮 -->
+                                            <button id="add-todo-btn" type="button" class="btn btn-primary w-100 font-weight-bold mt-2 w-100" data-toggle="modal" data-target="#add-todo-modal">ADD TODO
+                                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                            </button>
+                                        </div> 
+                                    </div>
+                                    <!--****************************************************************************-->
+
+                                    <!--********************************* Ongoing Tab ******************************-->
+                                    <div class="tab-pane fade" id="ongoing" role="tabpanel" aria-labelledby="todo-tab" style="height: 100%;">
+                                        <div class="card text-white bg-light mb-3 w-100" aria-hidden="true" style="height: 100%;">
+                                            <!-- 内嵌卡片脚身子 -->
+                                            <div class="card-body" style="height:100%; overflow: auto;">
+                                                <!-- TODO项目列表 -->
+                                                <ul id="ongoing_list" class="list-group text-dark">
+                                                    <!-- 一个TODO项目 -->
+                                                </ul>
+                                            </div>
+                                            <!--占位按钮 -->
+                                            <button type="button" class="btn btn-primary w-100 font-weight-bold mt-2 w-100 disabled invisible"> 
+                                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                            </button>
+                                        </div> 
+                                    </div>
+                                    <!--****************************************************************************-->
+
+                                    <!--********************************* Done Tab *********************************-->
+                                    <div class="tab-pane fade" id="done" role="tabpanel" aria-labelledby="todo-tab" style="height: 100%;">
+                                        <div class="card text-white bg-light mb-3 w-100" aria-hidden="true" style="height: 100%;">
+                                            <!-- 内嵌卡片脚身子 -->
+                                            <div class="card-body" style="height:100%; overflow: auto;">
+                                                <!-- TODO项目列表 -->
+                                                <ul id="done_list" class="list-group text-dark">
+                                                    <!-- 一个TODO项目 -->
+                                                </ul>
+                                            </div>
+                                            <!--占位按钮 -->
+                                            <button type="button" class="btn btn-primary w-100 font-weight-bold mt-2 w-100 disabled invisible"> 
+                                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                            </button>
+                                        </div> 
+                                    </div>
+                                    <!--****************************************************************************-->
+                                    <!--********************************* Members Tab ******************************-->
+                                    <div class="tab-pane fade" id="members" role="tabpanel" aria-labelledby="todo-tab" style="height: 100%;">
+                                        <div class="card text-white bg-light mb-3 w-100" aria-hidden="true" style="height: 100%;">
+                                            <!-- 内嵌卡片脚身子 -->
+                                            <div class="card-body" style="height:100%; overflow: auto;">
+                                                <!-- TODO项目列表 -->
+                                                <ul id="members_list" class="list-group text-dark">
+                                                    <!-- 一个TODO项目 -->
+                                                </ul>
+                                            </div>
+                                            <!--添加member按钮 -->
+                                            <button id="add-member-btn" type="button" class="btn btn-primary w-100 font-weight-bold mt-2 w-100" data-toggle="modal" data-target="#add-member-modal">ADD Member <i class="fa fa-plus" aria-hidden="true"></i>
+                                            </button>
+                                        </div> 
+                                    </div>
+                                    <!--*********************************End Members Tab ******************************-->
+                                </div>
+                            </div>
+                            <!-- Outer Card Footer-->
+                            <div class="card-footer" style="height: 6%">
+                                <p>Code makes teamworks nicer</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Add toto modal-->
+        <div class="modal fade black-text" id="add-todo-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <form id="add-todo-form">
+                            <div class="form-group">
+                                <input type="text" name="add-todo-input" class="form-control" placeholder="Todo">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-outline-primary">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit todo modal -->
+        <div class="modal fade black-text" id="edit-todo-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <form id="edit-todo-form">
+                            <div class="form-group">
+                                <input type="text" name="edit-todo-input" class="form-control" placeholder="Change to...">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-outline-primary">Edit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add member -->
+        <div class="modal fade black-text" id="add-member-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <form id="add-member-form">
+                            <div class="form-group">
+                                <input type="text" name="add-member-input" class="form-control" placeholder="Input Member's ID">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-outline-primary">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Create room modal-->
+        <div class="modal fade black-text" id="create-room-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <form id="create-room-form">
+                            <div class="form-group">
+                                <input type="text" name="create-room-input" class="form-control" placeholder="Enter the room name">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-outline-primary">Create</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 加入房间弹出窗口 -->
+        <div class="modal fade black-text" id="join-room-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <form id="join-room-form">
+                            <div class="form-group">
+                                <input type="text" name="join-room-input" class="form-control" placeholder="Enter the room id">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-outline-primary">Join</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Delete room modal -->
+        <div class="modal fade black-text" id="delete-room-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <form id="delete-room-form">
+                            <div class="form-group">
+                                <input type="text" name="delete-room-name-input" class="form-control" placeholder="Enter the Room name">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="delete-room-id-input" class="form-control" placeholder="Enter the Room number">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-outline-danger">Delete</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+        <script src="/controller/controller.js"></script>
+        <script src="/controller/notify.js"></script>
+    </body>
+    </html>
