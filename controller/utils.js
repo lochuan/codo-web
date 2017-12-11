@@ -74,4 +74,4 @@ function eventHandler(event){
     }
 }
 
-function 
+function poorManTmpl
