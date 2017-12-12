@@ -35,7 +35,7 @@ class User{
 	}
 
 	public function update_user(){
-		$sql = "UPDATE account SET todo = $1, ongoing = $2, done = $3, WHERE user_id = $4";
+		$sql = "UPDATE account SET todo = $1, ongoing = $2, done = $3 WHERE user_id = $4";
 		$params = [$this -> todo, $this -> ongoing, $this -> done,$this -> user_id];
 		DB::query_params($sql, $params);
 	}
