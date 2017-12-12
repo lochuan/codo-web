@@ -41,7 +41,7 @@ class User{
 	}
 
 	public function response_room_list(){
-        $room_list = [];
+		$room_list = [];
 		$sql= "SELECT room.room_id, room.room_name FROM room INNER JOIN (SELECT account_room.room_id FROM account_room WHERE account_room.user_id = $1) AS account_room_id ON (room.room_id = account_room_id.room_id)";
 		$params= [$this -> user_id];
 		$result= DB::query_params($sql, $params);
@@ -49,11 +49,20 @@ class User{
 			$room = ["room_id" => $row['room_id'], "room_name" => $row['room_name']];
 			array_push($room_list, $room);
 		}
-		$this -> response['success'] = true;
-		$this -> response['data'] = $room_list;
-		$this -> response['func'] = $this -> func;
-		echo json_encode($this -> response);
-        exit;
+		if(count($room_list) !== 0){
+			$this -> response['success'] = true;
+			$this -> response['data'] = $room_list;
+			$this -> response['func'] = $this -> func;
+			echo json_encode($this -> response);
+			exit;
+		}else{
+			$this -> response['success'] = false;
+			$this -> response['func'] = $this -> func;
+			$this -> response['notify'] = "You don't have any room";
+			echo json_encode($this -> response);
+			exit;
+		}
+		
 	}
 
 	public function create_room($room_name){
@@ -66,8 +75,8 @@ class User{
 		$result_insert_user_room = DB::query_params($sql_insert_user_room, $params_insert_user_room);
 
 		if($row_create_room && $result_insert_user_room){
-            Logger::log($this -> user_id, "Create Room", $row_create_room['room_id']);
-            $this -> response_room_list();
+			Logger::log($this -> user_id, "Create Room", $row_create_room['room_id']);
+			$this -> response_room_list();
 		}else{
 			$this -> response['success'] = false;
 			$this -> response['notify'] = "Create room failed";
@@ -85,59 +94,59 @@ class User{
 			$sql_insert_user_room = "INSERT INTO account_room (user_id, room_id) VALUES ($1, $2)";
 			$params_insert_user_room = [$this -> user_id, $room_id];
 			$result_insert_user_room = DB::query_params($sql_insert_user_room, $params_insert_user_room);
-            if(!empty($result_insert_user_room)){
-                Logger::log($this -> user_id, "Join Room", $room_id);
-                $this -> response_room_list();
-            }else{
-                $this -> response['success'] = false;
-                $this -> response['notify'] = "You have already in the room";
-                $this -> response['func'] = $this -> func;
-                echo json_encode($this -> response);
-                exit;
-            }
+			if(!empty($result_insert_user_room)){
+				Logger::log($this -> user_id, "Join Room", $room_id);
+				$this -> response_room_list();
+			}else{
+				$this -> response['success'] = false;
+				$this -> response['notify'] = "You have already in the room";
+				$this -> response['func'] = $this -> func;
+				echo json_encode($this -> response);
+				exit;
+			}
 
-        }else{
-            $this -> response['success'] = false;
-            $this -> response['notify'] = "Room ID not found";
-            $this -> response['func'] = $this -> func;
-            echo json_encode($this -> response);
-            exit;
-        }
-    }
+		}else{
+			$this -> response['success'] = false;
+			$this -> response['notify'] = "Room ID not found";
+			$this -> response['func'] = $this -> func;
+			echo json_encode($this -> response);
+			exit;
+		}
+	}
 
-    public function delete_room($room_id, $room_name){
-        $sql_room_name_id = "SELECT room_id, room_name FROM room WHERE room_id = $1";
-        $params_room_name_id = [$room_id];
-        $row_room_name_id = DB::row(DB::query_params($sql_room_name_id, $params_room_name_id));
-        if(!empty($row_room_name_id)){
-            if($row_room_name_id['room_name'] == $room_name){
-                $sql_delete = "DELETE FROM room WHERE room_id = $1";
-                $params_delete = [$room_id];
-                $delete_result = DB::query_params($sql_delete, $params_delete);
-                if(!empty($delete_result)){
-                    Logger::log($this -> user_id, "Delete Room", $room_id);
-                    $this -> response_room_list();
-                }else{
-                    $this -> response['success'] = false;
-                    $this -> response['notify'] = "Delete room failed";
-                    $this -> response['func'] = $this -> func;
-                    echo json_encode($this -> response);
-                    exit;
-                }
-            }else{
-                $this -> response['success'] = false;
-                $this -> response['notify'] = "Room ID and room name don't match";
-                $this -> response['func'] = $this -> func;
-                echo json_encode($this -> response);
-                exit;
-            }
-        }else{
-            $this -> response['success'] = false;
-            $this -> response['notify'] = "Room ID not found";
-            $this -> response['func'] = $this -> func;
-            echo json_encode($this -> response);
-            exit;
-        }
-    }
+	public function delete_room($room_id, $room_name){
+		$sql_room_name_id = "SELECT room_id, room_name FROM room WHERE room_id = $1";
+		$params_room_name_id = [$room_id];
+		$row_room_name_id = DB::row(DB::query_params($sql_room_name_id, $params_room_name_id));
+		if(!empty($row_room_name_id)){
+			if($row_room_name_id['room_name'] == $room_name){
+				$sql_delete = "DELETE FROM room WHERE room_id = $1";
+				$params_delete = [$room_id];
+				$delete_result = DB::query_params($sql_delete, $params_delete);
+				if(!empty($delete_result)){
+					Logger::log($this -> user_id, "Delete Room", $room_id);
+					$this -> response_room_list();
+				}else{
+					$this -> response['success'] = false;
+					$this -> response['notify'] = "Delete room failed";
+					$this -> response['func'] = $this -> func;
+					echo json_encode($this -> response);
+					exit;
+				}
+			}else{
+				$this -> response['success'] = false;
+				$this -> response['notify'] = "Room ID and room name don't match";
+				$this -> response['func'] = $this -> func;
+				echo json_encode($this -> response);
+				exit;
+			}
+		}else{
+			$this -> response['success'] = false;
+			$this -> response['notify'] = "Room ID not found";
+			$this -> response['func'] = $this -> func;
+			echo json_encode($this -> response);
+			exit;
+		}
+	}
 }
 ?>

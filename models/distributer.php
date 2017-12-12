@@ -1,7 +1,7 @@
 <?php
-$utils_route = ['user_registration', 'user_login', 'id_check', 'user_logout'];
-$user_route  = ['create_room', 'join_room', 'delete_room'];
-$room_route  = ['add_todo', 'delete_todo', 'pick_todo', 'done_todo'];
+$utils_route = ['user_registration', 'user_login', 'id_check', 'user_logout', 'add_member_check'];
+$user_route  = ['create_room', 'join_room', 'delete_room', 'get_room_list'];
+$room_route  = ['add_todo', 'delete_todo', 'pick_todo', 'done_todo', 'get_room_info', 'add_member'];
 
 $data = file_get_contents('php://input');
 session_start();
@@ -22,8 +22,14 @@ if(!empty($data)){
         case 'user_login':
             Utils::login($data['form']['login-input-id'], $data['form']['login-input-password']);
             break;
+        case 'user_logout':
+            Utils::logout();
+            break;
         case 'id_check':
             Utils::id_check($data['user-id']);
+            break;
+        case 'add_member_check':
+            Utils::add_member_check($data['user-id']);
             break;
         }
     }
@@ -33,6 +39,9 @@ if(!empty($data)){
             $user = new User($_SESSION['user_name'], $data['func']);
             $user -> init();
             switch($data['func']){
+            case 'get_room_list':
+                $user -> response_room_list();
+                break;
             case 'create_room':
                 $user -> create_room($data['form']['create-room-input']);
                 break;
@@ -42,16 +51,20 @@ if(!empty($data)){
             case 'delete_room':
                 $user -> delete_room($data['form']['delete-room-id-input'], $data['form']['delete-room-name-input']);
                 break;
+
             } 
         }   
     }
 
     if(in_array($data['func'], $room_route)){
         if(!empty($_SESSION['user_name']) && !empty($data['room-id'])){
-            $user = new User($_SESSION['user_name']);
+            $user = new User($_SESSION['user_name'], $data['func']);
             $user -> init();
-            $room = new Room($data['room-id']);
+            $room = new Room($data['room-id'], $data['func']);
             switch($data['func']){
+            case 'get_room_info':
+                $room -> response_room_info($user);
+                break;
             case 'add_todo':
                 $room -> add_todo($user, $data['form']['add-todo-input']);
                 break;
@@ -63,6 +76,9 @@ if(!empty($data)){
                 break;
             case 'done_todo':
                 $room -> done_todo($user, $data['todo-id']);
+                break;
+            case 'add_member':
+                $room -> add_member($user, $data);
                 break;
             } 
         }

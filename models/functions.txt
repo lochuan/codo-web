@@ -8,7 +8,6 @@ delete_room($room_id, $room_name)
 //Room
 add_todo($user, $todo)
 delete_todo($user, $todo_id)
-edit_todo($todo_id, $todo)
 pick_todo($user, $todo_id)
 done_todo($user, $todo_id)
 

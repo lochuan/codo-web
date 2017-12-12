@@ -13,8 +13,8 @@ class Room{
         $this -> func = $func;
     }
 
-    public function response_room_info(){
-        $tods = $this -> get_tods();
+    public function response_room_info($user){
+        $tods = $this -> get_tods($user);
         $members = $this -> get_members();
         $this -> response['success'] = true;
         $this -> response['func'] = $this -> func;
@@ -37,7 +37,7 @@ class Room{
             $user -> todo += 1;
             $user -> update_user();
             Logger::log($user -> get_user_id(), "Add Todo", $this -> room_id);
-            $this -> response_room_info();
+            $this -> response_room_info($user);
         }else{
             $this -> response['success'] = false;
             $this -> response['func'] = $this -> func;
@@ -56,7 +56,7 @@ class Room{
             $user -> todo -= 1;
             $user -> update_user();
             Logger::log($user -> get_user_id(), "Delete Todo", $this -> room_id);
-            $this -> response_room_info();
+            $this -> response_room_info($user);
         }else{
             $this -> response['success'] = false;
             $this -> response['notify'] = "Delete todo failed";
@@ -67,7 +67,7 @@ class Room{
     }
 
     public function pick_todo($user, $todo_id){
-        if(check_todo_status($todo_id) == 1){
+        if($this -> check_todo_status($todo_id) == 1){
             $this -> response['success'] = false;
             $this -> response['func'] = $this -> func;
             $this -> response['notify'] = "The todo was picked by others";
@@ -76,13 +76,13 @@ class Room{
         }
         $sql = "UPDATE todos SET status = $1, user_id = $2, create_time = DEFAULT WHERE todo_id = $3";
         $params = [1, $user -> get_user_id(), $todo_id];
-        $result = DB::query_params($sql_pick_todo, $params_pick_todo);
+        $result = DB::query_params($sql, $params);
 
         if(!empty($result)){
             $user -> ongoing += 1;
             $user -> update_user();
             Logger::log($user -> get_user_id(), "Pick Todo", $this -> room_id);
-            $this -> response_room_info();
+            $this -> response_room_info($user);
         }else{
             $this -> response['success'] = false;
             $this -> response['func'] = $this -> func;
@@ -93,6 +93,13 @@ class Room{
     }
 
     public function done_todo($user, $todo_id){
+        if($this -> check_todo_status($todo_id) == 2){
+            $this -> response['success'] = false;
+            $this -> response['func'] = $this -> func;
+            $this -> response['notify'] = "The todo was picked by others";
+            echo json_encode($this -> response);
+            exit;
+        }
         $sql_done_todo = "UPDATE todos SET status = $1, user_id = $2, create_time = DEFAULT WHERE todo_id = $3";
         $params_done_todo = [2, $user -> get_user_id(), $todo_id];
         $result = DB::query_params($sql_done_todo, $params_done_todo);
@@ -101,7 +108,7 @@ class Room{
             $user -> done += 1;
             $user -> update_user();
             Logger::log($user -> get_user_id(), "Done Todo", $this -> room_id);
-            $this -> response_room_info();
+            $this -> response_room_info($user);
         }else{
             $this -> response['success'] = false;
             $this -> response['func'] = $this -> func;
@@ -111,7 +118,25 @@ class Room{
         }
     }
 
-    private function get_tods(){
+    public function add_member($user, $data){
+            $user_gonna_add = new User($data['form']['add-member-input']);
+            $user_gonna_add -> init();
+            $sql = "INSERT INTO account_room (user_id, room_id) VALUES ($1, $2)";
+            $params = [$user_gonna_add -> get_user_id(), $this -> room_id];
+            $result = DB::query_params($sql, $params);
+            if(!empty($result)){
+                Logger::log($this -> user_id, "Add".$input." to the room", $room_id);
+                $this -> response_room_info();
+            }else{
+                $this -> response['success'] = false;
+                $this -> response['notify'] = "The user have already in the room";
+                $this -> response['func'] = $this -> func;
+                echo json_encode($this -> response);
+                exit;
+            }
+    }
+
+    private function get_tods($user){
         $todos    = [];
         $ongoings = [];
         $dones    = [];
@@ -129,7 +154,9 @@ class Room{
                 $params = [$this -> room_id, $status];
                 $result = DB::query_params($sql, $params);
                 while($row = DB::row($result)){
-                    $item = ["todo_id" => $row['todo_id'], "todo" => $row['todo'], "create_time" => $row['create_time'], "real_name" => $row['real_name']];
+                    $visibility = "invisible";
+                    if($user -> get_real_name() == $row['real_name']) {$visibility = "visible";}
+                    $item = ["todo_id" => $row['todo_id'], "todo" => $row['todo'], "create_time" => $row['create_time'], "real_name" => $row['real_name'], 'visibility' => $visibility];
                     array_push($todos, $item);
                 }
                 break;
@@ -137,7 +164,9 @@ class Room{
                 $params = [$this -> room_id, $status];
                 $result = DB::query_params($sql, $params);
                 while($row = DB::row($result)){
-                    $item = ["todo_id" => $row['todo_id'], "todo" => $row['todo'], "create_time" => $row['create_time'], "real_name" => $row['real_name']];
+                    $visibility = "invisible";
+                    if($user -> get_real_name() == $row['real_name']){$visibility = "visible";}
+                    $item = ["todo_id" => $row['todo_id'], "todo" => $row['todo'], "create_time" => $row['create_time'], "real_name" => $row['real_name'], 'visibility' => $visibility];
                     array_push($ongoings, $item);
                 }
                 break;
@@ -146,10 +175,9 @@ class Room{
                 $result = DB::query_params($sql, $params);
                 while($row = DB::row($result)){
                     $item = ["todo_id" => $row['todo_id'], "todo" => $row['todo'], "create_time" => $row['create_time'], "real_name" => $row['real_name']];
-                    array_push($ongoings, $item);
+                    array_push($dones, $item);
                 }
                 break;
-
             }
         }
         $data['todo'] = $todos;
@@ -159,14 +187,15 @@ class Room{
     }
 
     private function get_members(){
-        $members = [];
+        $members_id = [];
+        $members_info = [];
         $sql = "SELECT user_id FROM account_room WHERE room_id = $1";
         $params = [$this -> room_id];
         $result = DB::query_params($sql, $params);
         while($row = DB::row($result)){
-            array_push($members, $row['user_id']);
+            array_push($members_id, $row['user_id']);
         }
-        foreach($members as $value){
+        foreach($members_id as $value){
             $member_info = ['real_name' => [], 'todo' => [], 'ongoing' => [], 'done' => []];
             $sql_user_info = "SELECT real_name, todo, ongoing, done FROM account WHERE user_id = $1";
             $params_user_info = [$value];
@@ -174,10 +203,10 @@ class Room{
             $member_info['real_name'] = $row['real_name'];
             $member_info['todo']      = $row['todo'];
             $member_info['ongoing']   = $row['ongoing'];
-            $member_infoj['done']     = $row['done'];
-            array_push($members, $member_info);
+            $member_info['done']     = $row['done'];
+            array_push($members_info, $member_info);
         }
-        return $members;
+        return $members_info;
     }
 }
 ?>
