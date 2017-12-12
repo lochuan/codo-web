@@ -1,10 +1,6 @@
 <?php
 class Room{
     private $room_id;
-    private $todo = [];
-    private $ongoing = [];
-    private $done = [];
-    private $members = [];
     private $func;
     private $response = ['success' => false, 'notify' => [], 'data' => [], 'func' => []];
 
@@ -16,9 +12,10 @@ class Room{
     public function response_room_info($user){
         $tods = $this -> get_tods($user);
         $members = $this -> get_members();
+        $activities = $this -> get_activities();
         $this -> response['success'] = true;
         $this -> response['func'] = $this -> func;
-        $this -> response['data'] = ['tods' => $tods, 'members' => $members];
+        $this -> response['data'] = ['tods' => $tods, 'members' => $members, 'activities' => $activities];
         echo json_encode($this -> response);
         exit;
     }
@@ -207,6 +204,21 @@ class Room{
             array_push($members_info, $member_info);
         }
         return $members_info;
+    }
+
+    private function get_activities(){
+        $activities = [];
+        $activity_info = [];
+        $sql = "SELECT account.real_name, activity.whendo, activity.whatdo FROM account INNER JOIN activity ON(activity.user_id = account.user_id) WHERE activity.wheredo = $1";
+        $params = [$this -> room_id];
+        $result = DB::query_params($sql, $params);
+        while($row = DB::row($result)){
+            $activity_info['who'] = $row['real_name'];
+            $activity_info['when'] = $row['whendo'];
+            $activity_info['what'] = $row['whatdo'];
+            array_push($activities, $activity_info);
+        }
+        return $activities;
     }
 }
 ?>

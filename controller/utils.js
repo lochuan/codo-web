@@ -117,10 +117,12 @@ function poorManTmpl(response){
         let ongoingTmpl = $("#ongoing-template").text();
         let doneTmpl = $("#done-template").text();
         let memberTmpl = $("#member-template").text();
+        let activityTmpl = $("#activity-template").text();
         let todoRendering = "";
         let ongoingRendering = "";
         let doneRendering = "";
         let memberRendering = "";
+        let activityRendering = "";
         for(let item of response.data.tods.todo){
             todoRendering += todoTmpl
             .replace("{{todo_id}}", item.todo_id)
@@ -158,6 +160,14 @@ function poorManTmpl(response){
             .replace("{{done}}", item.done);
         }
         renderingQueue['member-list'] = memberRendering;
+
+        for(let item of response.data.activities){
+            activityRendering += activityTmpl
+            .replace("{{who}}", item.who)
+            .replace("{{when}}", item.when)
+            .replace("{{what}}", item.what)
+        }
+        renderingQueue['activity-list'] = activityRendering;
 
         return renderingQueue;
     }
