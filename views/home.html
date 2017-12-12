@@ -241,6 +241,7 @@
                 </div>
             </div>
         </div>
+<<<<<<< HEAD
     </div>
     <!-- room template -->
     <script id="room-template" type="template">
@@ -326,5 +327,52 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
     <script src="/controller/controller.js"></script>
     <script src="/controller/notify.js"></script>
+=======
+        <!-- A room template -->
+        <script id="room-template" type="template">
+            <a class="list-group-item list-group-item-action d-flex flex-row justify-content-between align-items-center active text-light">{{rom_name}}<span class="badge badge-warning badge-pill text-dark">ID:{{room_id}}</span></a>
+        </script>
+        <!-- A todo template -->
+        <script id="todo-template" type="template">
+            <li id="{{todo_id}}" class="list-group-item list-group-item-primary d-flex flex-row justify-content-between align-items-center">
+                <p class="w-50" style="text-align:left;">{{todo}}</p>
+                <span class="badge badge-primary">{{real_name}}</span>
+                <span class="badge badge-secondary">{{create_time}}</span>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="eventHandler(event)">DELETE <i class="fa fa-trash" aria-hidden="true"></i></button>
+                    <button type="button" class="btn btn-dark btn-sm" onclick="eventHandler(event)">PICK <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                </div>
+            </li>
+        </script>
+        <!-- A ongoing template -->
+        <script id="ongoging-template" type="template">
+            <li id="{{todo_id}}" class="list-group-item list-group-item-primary d-flex flex-row justify-content-between align-items-center">
+                <p class="w-50" style="text-align:left;">{{todo}}</p>
+                <span class="badge badge-primary">{{real_name}}</span>
+                <span class="badge badge-secondary">{{create_time}}</span>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-success btn-sm" onclick="eventHandler(event)">Done<i class="fa fa-check" aria-hidden="true"></i></button>
+                </div>
+            </li>
+        </script>
+        <!-- A done template -->
+        <script id="done-template" type="template">
+            <li id="{{todo_id}}" class="list-group-item list-group-item-primary d-flex flex-row justify-content-between align-items-center">
+                <p class="w-50" style="text-align:left;">{{todo}}</p>
+                <span class="badge badge-primary">{{real_name}}</span>
+                <span class="badge badge-secondary">{{create_time}}</span>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-danger btn-sm">Thank you<i class="fa fa-heart" aria-hidden="true"></i></button>
+                </div>
+            </li>
+        </script>
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+        <script src="/controller/controller.js"></script>
+        <script src="/controller/notify.js"></script>
+>>>>>>> aee97ac1742ac6d51e11b392fc0aa2f2bfb32c4a
 </body>
 </html>
