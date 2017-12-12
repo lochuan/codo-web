@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
     <!-- User CSS -->
-    <link rel="stylesheet" type="text/css" href="/views/style/home.css">
+    <link rel="stylesheet" type="text/css" href="style/home.css">
     <!-- Icon -->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 </head>
@@ -56,6 +56,19 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="members-tab" data-toggle="tab" href="#members" role="tab" aria-controls="members" aria-selected="false">Members</a>
+                                </li>
+                                <li class="nav-item">
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Activity
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <div class="card-body" style="height:100%; overflow: auto;">
+                                                <ul id="activity-list" class="list-group text-dark">
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </li>
                                 <li class="nav-item">
                                     <a id="ajax_spinner" class="nav-link text-danger" role="tab" aria-selected="false"><i class="fa fa-refresh fa-spin fa-1x fa-fw"></i></a>
@@ -295,6 +308,15 @@
         <span class="badge badge-primary w-20">Todos:{{todo}}</span>
         <span class="badge badge-success w-20">Ongoging:{{ongoing}}</span>
         <span class="badge badge-warning w-20">Done:{{done}}</span>
+        </li>
+    </script>
+
+    <!-- activity template-->
+    <script id="activity-template" type="template">
+        <li class="list-group-item list-group-item-primary d-flex flex-row justify-content-between align-items-center">
+        <p class="w-30" style="text-align:left;">{{who}}</p>
+        <span class="badge badge-primary w-40">{{when}}</span>
+        <span class="badge badge-warning w-30">{{what}}</span>
         </li>
     </script>
 
