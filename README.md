@@ -62,3 +62,7 @@ SetEnv CODO_DB_CONN "host=**** dbname=**** user=****password=****"
 ```
 
 If this is for a specific virtual host, and you have access to the Apache configuration files, this would go inside the <VirtualHost> directive for that virtual host.
+ 
+ ## Thanks
+* [Dozing bird by 张科林](https://dribbble.com/Colin-Chang)
+* [notify.js by jpillora](https://github.com/jpillora/notifyjs)
