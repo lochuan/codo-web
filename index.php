@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(isset($_SESSION['login']) && $_SESSION['login'] == true){
+if(!empty($_SESSION['login'])){
     header("Location: home.php");
     exit;
 }
