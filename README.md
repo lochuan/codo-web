@@ -1,7 +1,64 @@
-# codo-web
-这是一个为了团队合作而创造出来的产品。
-它拥有着可提出任务，可追踪任务；
-从而可判断出每一名组员对整个团体所作出的贡献。
-例如（操作演示）：A为整个项目提出了5个需要做的任务（todo 5），最后却只完成了2个任务(done 2)；
-                  同时，B为整个项目也提出了5个需要做的任务(todo 5)，最后完成了8个任务(done 8)。
-                  从而一眼可以看出B对整个团队的贡献更大，因此相对应该得到的分数大于A。
+### Codo: Collaboration Todo
+
+**Codo** is a tiny project for Internet Programming course(CS Dept. of University of Seoul).
+
+The project adopts MVC pattern, there are three folders within the main directory:
+
+* controllers
+* models
+* views
+
+The **controllers** was written in JavaScript. It receives user's input, push the data to the server, and rendering the page base on server's response.
+
+The **models** was written in PHP. It gets the data from the client and deals with the **DB** stuff.
+ 
+The **views** are just HTML pages. It define how the page looks like.
+
+Here is the full view of the project structure:
+
+```
+├── LICENSE
+├── README.md
+├── controllers
+│   ├── controller.js
+│   ├── home_utils.js
+│   ├── index_utils.js
+│   ├── notify.js
+│   └── utils.js
+├── home.php
+├── index.php
+├── models
+│   ├── classes
+│   │   ├── logger.php
+│   │   ├── room.php
+│   │   ├── user.php
+│   │   └── utils.php
+│   ├── config
+│   │   ├── db_table
+│   │   └── dbconn.php
+│   └── distributer.php
+└── views
+    ├── home.html
+    ├── index.html
+    └── style
+        ├── home.css
+        └── index.css
+```
+
+## Requirements
+
+1. [Apache2](https://httpd.apache.org)
+2. [PHP 7.0+](http://php.net/)
+3. [PostgreSQL](https://www.postgresql.org/)
+
+---
+
+After the requirements all set, you have to declare a *connection string* for PostgreSQL connection.
+
+SetEnv sets a particular variable to some value, for using the code you need something like
+
+```
+SetEnv CODO_DB_CONN "host=**** dbname=**** user=****password=****"
+```
+
+If this is for a specific virtual host, and you have access to the Apache configuration files, this would go inside the <VirtualHost> directive for that virtual host.

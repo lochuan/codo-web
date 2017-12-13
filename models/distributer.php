@@ -3,8 +3,8 @@ $utils_route   = ['user_registration', 'user_login', 'id_check', 'user_logout', 
 $user_route    = ['create_room', 'join_room', 'delete_room', 'get_room_list'];
 $room_route    = ['add_todo', 'delete_todo', 'pick_todo', 'done_todo', 'get_room_info', 'add_member'];
 $include_files = ['config/dbconn.php', 'classes/logger.php', 'classes/user.php', 'classes/room.php', 'classes/utils.php'];
+$data          = file_get_contents('php://input');
 
-$data = file_get_contents('php://input');
 session_start();
 if(!empty($data)){
     $data = json_decode($data, true); //Parse to assoc arr
