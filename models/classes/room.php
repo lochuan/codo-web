@@ -20,7 +20,7 @@ class Room{
     public function check_todo_status($todo_id){
         $sql = "SELECT status FROM todos WHERE todo_id = $1";
         $params = [$todo_id];
-        return DB::row(DB::query_params($sql, $params))['todo_id'];
+        return DB::row(DB::query_params($sql, $params))['status'];
     }
 
     public function add_todo($user, $todo){
@@ -50,7 +50,7 @@ class Room{
     }
 
     public function pick_todo($user, $todo_id){
-        if($this -> check_todo_status($todo_id) == 1){Utils::response(false, $this -> func, "The todo was picked by others");}
+        if($this -> check_todo_status($todo_id) == 1){Utils::response(false, $this -> func, "The todo was picked by others, page will refresh now");}
 
         $sql = "UPDATE todos SET status = $1, user_id = $2, create_time = DEFAULT WHERE todo_id = $3";
         $params = [1, $user -> get_user_id(), $todo_id];
@@ -155,11 +155,11 @@ class Room{
 
     private function get_activities(){
         $activities = [];
-        $sql = "SELECT account.real_name, activity.whendo, activity.whatdo FROM account INNER JOIN activity ON(activity.user_id = account.user_id) WHERE activity.wheredo = $1";
+        $sql = "SELECT account.real_name, activity.whendo::timestamptz AT TIME ZONE 'ASIA/SEOUL', activity.whatdo FROM account INNER JOIN activity ON(activity.user_id = account.user_id) WHERE activity.wheredo = $1";
         $params = [$this -> room_id];
         $result = DB::query_params($sql, $params);
         while($row = DB::row($result)){
-            $activity_info = ['who' => $row['real_name'], 'when' => $row['whendo'], 'what' => $row['whatdo']];
+            $activity_info = ['who' => $row['real_name'], 'when' => $row['timezone'], 'what' => $row['whatdo']];
             $activities[] = $activity_info;
         }
         return $activities;

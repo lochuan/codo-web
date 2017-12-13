@@ -25,9 +25,7 @@ function pickActiveRoom(){
     roomId = roomId.split(":")[1];
     return roomId;
 }
-/*
- *Constructor Function用来构建一个formHijacker对象
- */
+
 function formHijacker(formArr, callback){
     this.formArr = formArr;
     this.hijack = () => {
@@ -90,6 +88,9 @@ function btnHijacker(event){
                     className: "error",
                     position: "top center"
                 });
+                setTimeout(() => {
+                    window.location.reload(true);
+                },1500);
             }
         });
     }
