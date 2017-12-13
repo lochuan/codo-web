@@ -15,11 +15,11 @@ var indexFormList = [
 ];
 
 $(document).ready(() => {
-    $.getScript('controller/utils.js', function(){
+    $.getScript('controllers/utils.js', function(){
         let currentPage = window.location.href.split("/").slice(-1)[0].split(".")[0];
         switch(currentPage){
             default:
-                $.getScript('controller/index_utils.js', () => {
+                $.getScript('controllers/index_utils.js', () => {
                     let indexFormHjk = new formHijacker(indexFormList, (response)=>{
                         if(response.success){
                             switch(response.func){
@@ -47,7 +47,7 @@ $(document).ready(() => {
                 });
                 break;
             case 'home':
-                $.getScript('controller/home_utils.js', () => {
+                $.getScript('controllers/home_utils.js', () => {
                     let roomFormHjk = new formHijacker(roomFormList, (response)=>{
                         if(response.success){
                             let renderingQueue = poorManTmpl(response);
