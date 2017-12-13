@@ -93,7 +93,7 @@ class Room{
 
     private function get_tods($user){
         $todos = $ongoings = $dones = [];
-        $sql = "SELECT account.real_name, todos.todo_id, todos.todo, todos.create_time FROM account INNER JOIN (SELECT todo_id, todo, create_time, user_id FROM todos WHERE room_id = $1 AND status = $2) AS todos ON (todos.user_id = account.user_id)";
+        $sql = "SELECT account.real_name, todos.todo_id, todos.todo, todos.create_time::timestamptz AT TIME ZONE 'ASIA/SEOUL' FROM account INNER JOIN (SELECT todo_id, todo, create_time, user_id FROM todos WHERE room_id = $1 AND status = $2) AS todos ON (todos.user_id = account.user_id)";
         /*
          *Todo Status    -> 0
          *Ongoing Status -> 1
@@ -107,7 +107,7 @@ class Room{
                 while($row = DB::row($result)){
                     $visibility = "invisible";
                     if($user -> get_real_name() == $row['real_name']) {$visibility = "visible";}
-                    $item = ["todo_id" => $row['todo_id'], "todo" => $row['todo'], "create_time" => $row['create_time'], "real_name" => $row['real_name'], 'visibility' => $visibility];
+                    $item = ["todo_id" => $row['todo_id'], "todo" => $row['todo'], "create_time" => $row['timezone'], "real_name" => $row['real_name'], 'visibility' => $visibility];
                     $todos[] = $item;
                 }
                 break;
@@ -117,7 +117,7 @@ class Room{
                 while($row = DB::row($result)){
                     $visibility = "invisible";
                     if($user -> get_real_name() == $row['real_name']){$visibility = "visible";}
-                    $item = ["todo_id" => $row['todo_id'], "todo" => $row['todo'], "create_time" => $row['create_time'], "real_name" => $row['real_name'], 'visibility' => $visibility];
+                    $item = ["todo_id" => $row['todo_id'], "todo" => $row['todo'], "create_time" => $row['timezone'], "real_name" => $row['real_name'], 'visibility' => $visibility];
                     $ongoings[] = $item;
                 }
                 break;
@@ -125,7 +125,7 @@ class Room{
                 $params = [$this -> room_id, $status];
                 $result = DB::query_params($sql, $params);
                 while($row = DB::row($result)){
-                    $item = ["todo_id" => $row['todo_id'], "todo" => $row['todo'], "create_time" => $row['create_time'], "real_name" => $row['real_name']];
+                    $item = ["todo_id" => $row['todo_id'], "todo" => $row['todo'], "create_time" => $row['timezone'], "real_name" => $row['real_name']];
                     $dones[] = $item;
                 }
                 break;
