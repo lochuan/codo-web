@@ -3,7 +3,7 @@ var bird;
 /*
  *获取房间列表
  */
- function getRoomList(){
+function getRoomList(){
     let postData = {
         func: 'get_room_list',
     }
@@ -36,11 +36,11 @@ function regAddMemberCheck(){
             postJson(url, postData, function(response){
                 if(response.success){
                     let feedBack = "<li class='list-group-item list-group-item-info d-flex flex-row justify-content-between align-items-center'>"
-                    + "<p class='w-40' style='text-align:left;'>"+response.data.real_name+"</p>"
-                    + "<span class='badge badge-primary w-20'>Todos:"+response.data.todo+"</span>"
-                    + "<span class='badge badge-success w-20'>Ongoging:"+response.data.ongoing+"</span>"
-                    + "<span class='badge badge-warning w-20'>Done:"+response.data.done+"</span>"
-                    + "</li>"
+                        + "<p class='w-40' style='text-align:left;'>"+response.data.real_name+"</p>"
+                        + "<span class='badge badge-primary w-20'>Todos:"+response.data.todo+"</span>"
+                        + "<span class='badge badge-success w-20'>Ongoging:"+response.data.ongoing+"</span>"
+                        + "<span class='badge badge-warning w-20'>Done:"+response.data.done+"</span>"
+                        + "</li>"
                     $("#add-member-check-container").empty().append(feedBack);
 
                 }else{
@@ -81,7 +81,7 @@ $(document).ready(() => {
             tabContent = $("#tab-content-container").detach();
             $("#outer-card-body").append(bird);
         }
-        
+
         $("#room-list .active").attr("class", "list-group-item list-group-item-action d-flex flex-row justify-content-between align-items-center text-dark");
 
     });

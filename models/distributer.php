@@ -1,18 +1,15 @@
 <?php
-$utils_route = ['user_registration', 'user_login', 'id_check', 'user_logout', 'add_member_check'];
-$user_route  = ['create_room', 'join_room', 'delete_room', 'get_room_list'];
-$room_route  = ['add_todo', 'delete_todo', 'pick_todo', 'done_todo', 'get_room_info', 'add_member'];
+$utils_route   = ['user_registration', 'user_login', 'id_check', 'user_logout', 'add_member_check'];
+$user_route    = ['create_room', 'join_room', 'delete_room', 'get_room_list'];
+$room_route    = ['add_todo', 'delete_todo', 'pick_todo', 'done_todo', 'get_room_info', 'add_member'];
+$include_files = ['config/dbconn.php', 'classes/logger.php', 'classes/user.php', 'classes/room.php', 'classes/utils.php'];
 
 $data = file_get_contents('php://input');
 session_start();
 if(!empty($data)){
     $data = json_decode($data, true); //Parse to assoc arr
     array_walk_recursive($data, function(&$item){$item = trim($item);}); //Trim
-    require_once('config/dbconn.php');
-    require_once('classes/logger.php');
-    require_once('classes/user.php');
-    require_once('classes/room.php');
-    require_once('classes/utils.php');
+    (function() use ($include_files) {foreach($include_files as $file){require_once($file);}})(); //import all dependent files
 
     if(in_array($data['func'], $utils_route)){
         switch($data['func']){
@@ -51,7 +48,6 @@ if(!empty($data)){
             case 'delete_room':
                 $user -> delete_room($data['form']['delete-room-id-input'], $data['form']['delete-room-name-input']);
                 break;
-
             } 
         }   
     }
@@ -82,7 +78,6 @@ if(!empty($data)){
                 break;
             } 
         }
-
     }
 }
 ?>

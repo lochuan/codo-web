@@ -1,15 +1,17 @@
+//forms in the home.html
 var roomFormList = [
-'create-room-form' ,
-'join-room-form'   ,
-'delete-room-form' ,
-'add-todo-form'    ,
-'edit-todo-form'   ,
-'add-member-form'  ,
+    'create-room-form' ,
+    'join-room-form'   ,
+    'delete-room-form' ,
+    'add-todo-form'    ,
+    'edit-todo-form'   ,
+    'add-member-form'  ,
 ];
 
+//forms in the index.html
 var indexFormList = [
-'user-login-form',
-'user-registration-form',
+    'user-login-form',
+    'user-registration-form',
 ];
 
 $(document).ready(() => {
@@ -17,56 +19,56 @@ $(document).ready(() => {
         let currentPage = window.location.href.split("/").slice(-1)[0].split(".")[0];
         switch(currentPage){
             default:
-            $.getScript('controller/index_utils.js', () => {
-                let indexFormHjk = new formHijacker(indexFormList, (response)=>{
-                    if(response.success){
-                        switch(response.func){
-                            case 'user_registration':
-                            closeAndNotify(response.func);
-                            $("#user-login-modal").modal("toggle");
-                            break;
-                            case 'user_login' :
-                            closeAndNotify(response.func);
-                            setTimeout(()=>{
-                                window.location.replace('home.php');
-                            }, 1500);
+                $.getScript('controller/index_utils.js', () => {
+                    let indexFormHjk = new formHijacker(indexFormList, (response)=>{
+                        if(response.success){
+                            switch(response.func){
+                                case 'user_registration':
+                                    closeAndNotify(response.func);
+                                    $("#user-login-modal").modal("toggle");
+                                    break;
+                                case 'user_login' :
+                                    closeAndNotify(response.func);
+                                    setTimeout(()=>{
+                                        window.location.replace('home.php');
+                                    }, 1500);
+                            }
+                        }else{
+                            $.notify(response.notify, {
+                                autoHideDelay: "3000",
+                                className: "error",
+                                position: "top center"
+                            });
                         }
-                    }else{
-                        $.notify(response.notify, {
-                            autoHideDelay: "3000",
-                            className: "error",
-                            position: "top center"
-                        });
-                    }
+                    });
+                    indexFormHjk.hijack(); //hijack the forms
+                    regPasswdCheck(); //register password check event handler
+                    regIdCheck(); //register id check event handler
                 });
-                indexFormHjk.hijack();
-                regPasswdCheck();
-                regIdCheck();
-            });
-            break;
+                break;
             case 'home':
-            $.getScript('controller/home_utils.js', () => {
-                let roomFormHjk = new formHijacker(roomFormList, (response)=>{
-                    if(response.success){
-                        let renderingQueue = poorManTmpl(response);
-                        for(let key in renderingQueue){
-                            $("#"+key).empty();
-                            $("#"+key).append(renderingQueue[key]);
+                $.getScript('controller/home_utils.js', () => {
+                    let roomFormHjk = new formHijacker(roomFormList, (response)=>{
+                        if(response.success){
+                            let renderingQueue = poorManTmpl(response);
+                            for(let key in renderingQueue){
+                                $("#"+key).empty();
+                                $("#"+key).append(renderingQueue[key]);
+                            }
+                            closeAndNotify(response.func);
+                        }else{
+                            $.notify(response.notify, {
+                                autoHideDelay: "3000",
+                                className: "error",
+                                position: "top center"
+                            });
                         }
-                        closeAndNotify(response.func);
-                    }else{
-                        $.notify(response.notify, {
-                            autoHideDelay: "3000",
-                            className: "error",
-                            position: "top center"
-                        });
-                    }
+                    });
+                    roomFormHjk.hijack();
+                    getRoomList();
+                    regAddMemberCheck();
                 });
-                roomFormHjk.hijack();
-                getRoomList();
-                regAddMemberCheck();
-            });
-            break;
+                break;
         }
     });
 });

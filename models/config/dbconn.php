@@ -11,7 +11,6 @@ class DB {
             $connection_string = getenv("CODO_DB_CONN");
 			self::$instance = pg_pconnect($connection_string, "PGSQL_CONNECT_ASYNC");
 		}
-
 		$resource = pg_query_params(self::$instance, $sql, $params);
 		return $resource;
 	}
@@ -21,7 +20,6 @@ class DB {
             $connection_string = getenv("CODO_DB_CONN");
 			self::$instance = pg_pconnect($connection_string, "PGSQL_CONNECT_ASYNC");
 		}
-
 		$resource = pg_query(self::$instance, $sql);
 		return $resource;
 	}

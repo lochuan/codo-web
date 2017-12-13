@@ -1,23 +1,23 @@
 function getFormData(form){
-	var unindexed_array = form.serializeArray();
-	var indexed_array = {};
+    var unindexed_array = form.serializeArray();
+    var indexed_array = {};
 
-	$.map(unindexed_array, function(n, i){
-		indexed_array[n['name']] = n['value'];
-	});
-	return indexed_array;
+    $.map(unindexed_array, function(n, i){
+        indexed_array[n['name']] = n['value'];
+    });
+    return indexed_array;
 }
 
 function postJson(url, data, callback){
-	if (url !== undefined && data.func !== undefined) {
-		if (data.form !== undefined) {data['form'] = getFormData(data.form)}
-          $.ajax({
-             url: url,
-             method: 'POST',
-             data: JSON.stringify(data),
-             dataType: 'JSON',
-         }).done(callback);
-  }
+    if (url !== undefined && data.func !== undefined) {
+        if (data.form !== undefined) {data['form'] = getFormData(data.form)}
+        $.ajax({
+            url: url,
+            method: 'POST',
+            data: JSON.stringify(data),
+            dataType: 'JSON',
+        }).done(callback);
+    }
 }
 
 function pickActiveRoom(){
@@ -28,7 +28,7 @@ function pickActiveRoom(){
 /*
  *Constructor Function用来构建一个formHijacker对象
  */
- function formHijacker(formArr, callback){
+function formHijacker(formArr, callback){
     this.formArr = formArr;
     this.hijack = () => {
         this.formArr.map((elem, i, array) => {
@@ -105,8 +105,8 @@ function poorManTmpl(response){
         let rendering = "";
         for(let item of response.data){
             rendering += tmpl
-            .replace("{{room_name}}", item.room_name)
-            .replace("{{room_id}}", item.room_id);
+                .replace("{{room_name}}", item.room_name)
+                .replace("{{room_id}}", item.room_id);
         }
         renderingQueue['room-list'] = rendering;
         return renderingQueue;
@@ -125,47 +125,47 @@ function poorManTmpl(response){
         let activityRendering = "";
         for(let item of response.data.tods.todo){
             todoRendering += todoTmpl
-            .replace("{{todo_id}}", item.todo_id)
-            .replace("{{real_name}}", item.real_name)
-            .replace("{{todo}}", item.todo)
-            .replace("{{visibility}}", item.visibility)
-            .replace("{{create_time}}", item.create_time);
+                .replace("{{todo_id}}", item.todo_id)
+                .replace("{{real_name}}", item.real_name)
+                .replace("{{todo}}", item.todo)
+                .replace("{{visibility}}", item.visibility)
+                .replace("{{create_time}}", item.create_time);
         }
         renderingQueue['todo-list'] = todoRendering;
 
         for(let item of response.data.tods.ongoing){
             ongoingRendering += ongoingTmpl
-            .replace("{{todo_id}}", item.todo_id)
-            .replace("{{real_name}}", item.real_name)
-            .replace("{{todo}}", item.todo)
-            .replace("{{visibility}}", item.visibility)
-            .replace("{{create_time}}", item.create_time);
+                .replace("{{todo_id}}", item.todo_id)
+                .replace("{{real_name}}", item.real_name)
+                .replace("{{todo}}", item.todo)
+                .replace("{{visibility}}", item.visibility)
+                .replace("{{create_time}}", item.create_time);
         }
         renderingQueue['ongoing-list'] = ongoingRendering;
 
         for(let item of response.data.tods.done){
             doneRendering += doneTmpl
-            .replace("{{todo_id}}", item.todo_id)
-            .replace("{{real_name}}", item.real_name)
-            .replace("{{todo}}", item.todo)
-            .replace("{{create_time}}", item.create_time);
+                .replace("{{todo_id}}", item.todo_id)
+                .replace("{{real_name}}", item.real_name)
+                .replace("{{todo}}", item.todo)
+                .replace("{{create_time}}", item.create_time);
         }
         renderingQueue['done-list'] = doneRendering;
 
         for(let item of response.data.members){
             memberRendering += memberTmpl
-            .replace("{{real_name}}", item.real_name)
-            .replace("{{todo}}", item.todo)
-            .replace("{{ongoing}}", item.ongoing)
-            .replace("{{done}}", item.done);
+                .replace("{{real_name}}", item.real_name)
+                .replace("{{todo}}", item.todo)
+                .replace("{{ongoing}}", item.ongoing)
+                .replace("{{done}}", item.done);
         }
         renderingQueue['member-list'] = memberRendering;
 
         for(let item of response.data.activities){
             activityRendering += activityTmpl
-            .replace("{{who}}", item.who)
-            .replace("{{when}}", item.when)
-            .replace("{{what}}", item.what)
+                .replace("{{who}}", item.who)
+                .replace("{{when}}", item.when)
+                .replace("{{what}}", item.what)
         }
         renderingQueue['activity-list'] = activityRendering;
 
