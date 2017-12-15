@@ -16,9 +16,6 @@ if(!empty($_SESSION['login'])){
             case 'user_logout':
                 Utils::logout();
                 break;
-            case 'id_check':
-                Utils::id_check($data['user-id']);
-                break;
             case 'add_member_check':
                 Utils::add_member_check($data['user-id']);
                 break;
@@ -85,6 +82,9 @@ if(!empty($_SESSION['login'])){
             break;
         case 'user_login':
             Utils::login($data['form']['login-input-id'], $data['form']['login-input-password']);
+            break;
+        case 'id_check':
+            Utils::id_check($data['user-id']);
             break;
         }
     }

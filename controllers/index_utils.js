@@ -25,6 +25,7 @@ function regIdCheck(){
                     $("#registration-input-id").attr('class', 'form-control is-valid');
                 }else{
                     $("#registration-input-id").notify(response.notify, {autoHideDelay: "1500",className: "error",position: "left middle"});
+                    $("#registration-warning").html('ID EXISTED!');
                     $("#registration-input-id").attr('class', 'form-control is-invalid');				
                 }
             });

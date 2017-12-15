@@ -6,7 +6,7 @@ class Utils{
         $params = [$user_name];
         $result = DB::row(DB::query_params($sql, $params));
         if($result){self::response(false, "id_check", "ID existed");}
-        else{self::start_response(true, "id_check");}
+        else{self::response(true, "id_check");}
     }
 
     public static function response($success, $func, $notify = null, $data = null) {
