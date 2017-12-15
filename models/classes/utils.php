@@ -20,7 +20,7 @@ class Utils{
         $row = DB::row(DB::query_params($sql, $params));
         if($row){
             $member_info = ['real_name' => $row['real_name'], 'todo' => $row['todo'], 'ongoing' => $row['ongoing'], 'done' => $row['done']];
-            self::response(true, "add_member_check");
+            self::response(true, "add_member_check", "notify", $member_info);
         }else{self::response(false, "add_member_check");}
     }
 

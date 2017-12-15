@@ -71,6 +71,7 @@ class Room{
         $result = DB::query_params($sql_done_todo, $params_done_todo);
 
         if(!empty($result)){
+            $user -> ongoing -= 1;
             $user -> done += 1;
             $user -> update_user();
             Logger::log($user -> get_user_id(), "Done Todo", $this -> room_id);
